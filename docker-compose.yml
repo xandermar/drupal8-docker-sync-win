@@ -10,7 +10,7 @@ services:
     expose:
       - "3306"
     volumes:
-      - ./mysql:/docker-entrypoint-initdb.d
+      - C:/Users/$USERNAME/Documents/Drupal8/mysql:/docker-entrypoint-initdb.d
   web:
     image: drupal:8
     volumes: 
