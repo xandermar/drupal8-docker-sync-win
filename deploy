@@ -1,0 +1,27 @@
+clear
+
+
+
+echo ""
+echo ""
+
+echo "DIRECTIONS: "
+echo "Enter the production domain of the site to deploy"
+echo "The domain MUST be in the sites directory within this repository"
+echo "To see a list, exit this script by typing CNTL+C and run 'ls -al sites/' from this directory"
+echo ""
+printf "Enter domain: "
+read -r p
+
+if [ -d "sites/$p" ]; then
+  
+  # mysql
+  docker run --name $p-mysql -e MYSQL_ROOT_PASSWORD=rootpass -e MYSQL_DATABASE=$p-mysql -v /$(pwd)/mysql:/docker-entrypoint-initdb.d -d mysql
+
+  # drupal
+  docker run --name $p -e DBNAME=$p-mysql -e DBUSER=root -e DBPASS=rootpass -v /$(pwd)/sites:/var/www/html/sites -v /$(pwd)/modules:/var/www/html/modules -v /$(pwd)/themes:/var/www/html/themes --link $p-mysql:mysql -p 80 -d drupal:8
+
+else
+  echo "The site, $p does not exist in the sites directory. Please try again."
+fi
+

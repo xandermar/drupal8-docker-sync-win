@@ -1,4 +1,4 @@
-version: '3'
+version: '2'
 services:
   db:
     image: mysql:5.7
@@ -9,13 +9,14 @@ services:
       - MYSQL_PASSWORD=admin
     expose:
       - "3306"
-    volumes:
-      - C:/Users/$USERNAME/Documents/Drupal8/mysql:/docker-entrypoint-initdb.d
   web:
     image: drupal:8
-    volumes: 
-      - C:/Users/$USERNAME/Documents/Drupal8/default:/var/www/html/sites/default
     ports:
-      - "5000:80"
+      - 5000:80
     links:
       - db
+    volumes:
+      - drupaldata:/var/www/html:Z
+
+volumes:
+  drupaldata:
